@@ -1,0 +1,100 @@
+1.How do you create Nested Routes, react-router-dom configurations
+->Nested routes can be created with the help of "children" property for a given path,
+Example:
+createBrowserRouter([
+    {
+        path:'/',
+        element:<SomeComponent1/>,
+        children: [
+            {
+                path:'/about',
+                element:<SomeComponent1A/>,
+            },
+            {
+                path:'/items',
+                element:<SomeComponent1B/>,
+                children: [
+                    {
+                        path:'itemDetails/:id',
+                        element:<SomeComponent1Ba/>,
+                    }
+                ]
+            }
+        ]
+    },
+])
+
+http://localhost:1234/ or http://localhost:1234 will load SomeComponent1,
+http://localhost:1234/about will load SomeComponent1A
+http://localhost:1234/items will load SomeComponent1B
+http://localhost:1234/items/itemDetails/578411 will load SomeComponent1Ba
+
+Note:remember to not give / for path for children want to be considered as Nested
+Because we we give / itll consider as from root, say
+if / was given in path:'/itemDetails/:id',
+this would come as http://localhost:1234/itemDetails/578411 and not as,
+http://localhost:1234/items/itemDetails/578411
+
+children component can be rendered using <Outlet/> from react-router-dom.
+-------------------------------------------------------------------------------------------------
+
+2.React about createHashRouter, createMemoryRouter from React Router docs
+i)createHashRouter:
+Instead of using normal URLs,
+it will use the hash (#) portion of the URL to manage the "application URL".
+Otherwise its same as createBrowserRouter.
+NOT Recommended
+
+ii)createMemoryRouter:
+Instead of using browser's history, it uses memory router which own history stack in memory.
+Can be used in non browser environments
+
+Ref: https://reactrouter.com/en/main/routers/create-hash-router
+-------------------------------------------------------------------------------------------------
+
+3.What is the order of life cycle method calls in Class Based components?
+Render phase:
+->a)First constructor() is called
+    b)render() is called
+Commit phase:
+    c)DOM is rendered onto the browser
+    d)componentDidMount() is called
+    e)if there is an async call(api call), calls it and goes ahead, once data is got
+    and if we are setting it to a state, change in state,
+Render phase:
+    f)calls render(),
+    g)DOM is rendered onto the browser,
+Commit phase:
+    h)componentDidUpdate() is called,
+    i)When we go out of our component, say change the page, componentWillUnmount() is called 
+
+-------------------------------------------------------------------------------------------------
+
+4.Why do we use componentDidMount?
+->componentDidMount: This is the function that is called after first render,
+so we use it to make api calls and set state accordingly
+
+-------------------------------------------------------------------------------------------------
+
+5.Why do we use componentWillUnmount? Show with example.
+->componentWillUnmount: is used to do do the cleanup, say, if any interval is set, 
+we need to clear that interval to avoid performance loss,
+because if its not stopped then it will keep running even if the component is removed from DOM,
+So before component is removed, that is inside componenetWillUnmount, we can clear the Intervals.
+
+-------------------------------------------------------------------------------------------------
+
+6.(Research)Why do we use super(props) in constructor?
+->yet to write answer...
+Ref:
+https://www.turing.com/kb/beginners-guide-to-super-and-super-props-in-react
+https://www.geeksforgeeks.org/what-is-the-use-of-superprops/
+https://overreacted.io/why-do-we-write-super-props/
+
+-------------------------------------------------------------------------------------------------
+
+7.(Research)Why cant we have the callback function of useEffect async?
+->yet to write answer...
+Ref: https://ultimatecourses.com/blog/using-async-await-inside-react-use-effect-hook#:~:text=Why%3F,function%20will%20never%20get%20called.
+
+-------------------------------------------------------------------------------------------------

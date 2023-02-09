@@ -1,0 +1,123 @@
+1.React initially had only class based components
+
+2.Class based components are for interviews and legacy repos
+
+3.children components are always rendered into outlet component OR 
+you can call them directly whereever you want by component name
+
+4.Class based components in at the end of the day is just a normal Javascript class
+
+5.We need to tell React that its class based component and not normal JS class by writing
+class class_name extends React.Component
+
+6.render() is mandatory funtion for class based components, it returns jsx
+
+7.Rendering a component naming comes from class component's render method 
+because earlier there were only class components which used render method to render the components
+
+8.We can access props inside our class components using this.props
+
+9.Research Homework: why super(props)
+
+10.Constructor is the place for initialization thats why we define all our states inside Constructor
+
+11.React gives us access to this.state
+
+12.we never mutate state directly i.e this.state = something, we never do this because reacts
+constantly keeps track of the state variables and triggers reconciliation process on state change,
+if we mutate it directly, react doesnt reconcile(UI wont be in sync)
+
+13. Older way:
+this.setState({
+    count: 0,
+    count1: 1,
+    count2: 2,
+    .
+    .
+    .
+})
+Here by the name we do not know which part of the state is changed
+
+Newer way:
+setCount(0);
+setCount1(1);
+seCount2(2);
+Here, by the name we know which exact state is changed
+
+14.componentDidMount : is the place where we do our api calls
+why? because we want our app to render first with anything that we have to give the user quick UI
+then once when the data is loaded from api call(componentDidMount/useEffect), rerender happens
+
+15.Child inside a Parent:
+Parent Constructor
+Parent Render
+    Child Constructor
+    Child Render
+    Child componentDidMount
+Parent componentDidMount
+
+16.Two children inside a Parent:
+Parent Constructor
+Parent Render
+    Child 1 Constructor
+    Child 1 Render
+    Child 2 Constructor
+    Child 2 Render
+    Child 1 componentDidMount
+    Child 2 componentDidMount
+Parent componentDidMount
+
+17.Why so for above behaviour:
+React when renders the page, it does it in 2 phases: i)Render phase ii)Commit phase
+In Render phase, constructor and render method is called
+In Commit phase, Babel first renders the initial DOM, then calls componentDidMount
+React batches all the render phases of its children and then goes to commit phase
+Because if React doesnt do above, say,
+completes render phase for first child and goes to commit phase for first child and it takes long time,
+render for second child will be delayed, which we dont want.
+
+18.Research homework:
+async componentDidMount(){} - is allowed
+useEffect(async () => {}) - is not allowed
+Why?
+
+19.Note: things that are dependent on aysnc function like console.log(jsonData) and other lines 
+inside componentDidMount dint execute,
+control went out of Child's cycle and printed Parent componentDidMount
+Then jsonData arrived...so control went back to console.log(jsonData) and rest following lines got
+executed one by one
+
+20.This rerender cycle is know as Updating in lifecycle of class components
+
+21.componentDidUpdate: will be called after every next render
+Ref: https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/ (VERY IMP LINK FOR LIFECYCLE)
+For React version : 16.4 and above
+Older versions had many more lifecycle functions
+
+22.NEVER compare lifecycle methods to functional compoent's hooks
+Eg:componentDidMount is equivalent to useEffect etc
+
+
+23.Have a look on componentDidMount(prevProps, prevState) in comparison with useEffect(() => {},[count])
+
+24.Suppose you have set setInterval in a component
+and you go to the other "page", the interval keeps on going,
+why? Because its "not different page", page that we are going to, 
+its a component rendered without reload
+This could cause performance issues if left,
+so we need to clear the Intervals we set,
+by using clearInterval(timer) inside componentWillUnmount()
+which is exactly why we use componentWillUnmount() for "cleanup".
+
+25.How can we do the unmounting in the functional compoent?
+useEffect(() => {
+    setInterval(() => {
+        console.log("Namaste React Interval");
+    },1000);
+
+    return ()=> {
+
+    }
+})
+
+this return function will behave like unmounting for functional components
